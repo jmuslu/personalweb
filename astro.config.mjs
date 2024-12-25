@@ -1,6 +1,8 @@
+
+
+
 import { defineConfig } from 'astro/config';
 
-// https://astro.build/config
-export default defineConfig({});
-    site: 'https://jmuslu.github.io',
-    base: '/personalweb',
+export default defineConfig({
+    base: '/<personalweb>/',
+});
