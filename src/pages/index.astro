@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Your Name - Data Science & Finance Portfolio">
+	<div class="hero">
+		<h1>Welcome to My Portfolio</h1>
+		<p class="subtitle">Data Science | Financial Analysis | Machine Learning</p>
+	</div>
+
+	<section class="featured">
+		<h2>Featured Projects</h2>
+		<p>Explore my latest work in data science and financial analysis</p>
+		<div class="cta-buttons">
+			<a href="/projects" class="button primary">View All Projects</a>
+			<a href="/about" class="button secondary">About Me</a>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.hero {
+		text-align: center;
+		padding: 4rem 0;
+	}
+
+	h1 {
+		font-size: 3rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+		background: linear-gradient(45deg, var(--accent-light), var(--accent));
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+
+	.subtitle {
+		font-size: 1.25rem;
+		color: #a1a1aa;
+		margin-bottom: 2rem;
+	}
+
+	.featured {
+		text-align: center;
+		margin: 4rem 0;
+	}
+
+	h2 {
+		font-size: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	.cta-buttons {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		margin-top: 2rem;
+	}
+
+	.button {
+		display: inline-block;
+		padding: 0.75rem 1.5rem;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 500;
+		transition: all 0.2s;
+	}
+
+	.primary {
+		background: var(--accent);
+		color: white;
+	}
+
+	.primary:hover {
+		background: var(--accent-light);
+	}
+
+	.secondary {
+		background: transparent;
+		border: 2px solid var(--accent);
+		color: var(--accent);
+	}
+
+	.secondary:hover {
+		background: var(--accent);
+		color: white;
+	}
+</style>

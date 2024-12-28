@@ -1,0 +1,66 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Personal portfolio showcasing data science and finance projects" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<nav class="bg-dark p-4">
+			<div class="container mx-auto">
+				<ul class="flex space-x-6">
+					<li><a href="/" class="text-white hover:text-accent">Home</a></li>
+					<li><a href="/projects" class="text-white hover:text-accent">Projects</a></li>
+					<li><a href="/about" class="text-white hover:text-accent">About</a></li>
+				</ul>
+			</div>
+		</nav>
+		<main>
+			<slot />
+		</main>
+		<footer class="bg-dark p-4 mt-8">
+			<div class="container mx-auto text-center text-white">
+				<p>&copy; {new Date().getFullYear()} - All rights reserved</p>
+			</div>
+		</footer>
+	</body>
+</html>
+<style is:global>
+	:root {
+		--accent: #646cff;
+		--accent-light: #747bff;
+		--background: #13151a;
+		--text: #ffffff;
+	}
+	html {
+		font-family: system-ui, sans-serif;
+		background: var(--background);
+		color: var(--text);
+	}
+	body {
+		margin: 0;
+		min-height: 100vh;
+	}
+	main {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem;
+	}
+	.bg-dark {
+		background-color: #0c0d11;
+	}
+	.text-accent {
+		color: var(--accent);
+	}
+</style>

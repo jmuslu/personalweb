@@ -1,0 +1,109 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About Me - Your Portfolio">
+	<div class="about-container">
+		<h1>About Me</h1>
+		<div class="content">
+			<div class="bio">
+				<p>
+					Welcome! I'm [Your Name], a data scientist and financial analyst passionate about
+					[your specific interests/expertise]. I specialize in [your key skills/areas].
+				</p>
+				<p>
+					My work focuses on [describe your focus areas and what you're trying to achieve
+					through your projects].
+				</p>
+			</div>
+
+			<div class="skills">
+				<h2>Skills & Expertise</h2>
+				<div class="skill-categories">
+					<div class="category">
+						<h3>Data Science</h3>
+						<ul>
+							<li>Python</li>
+							<li>Machine Learning</li>
+							<li>Data Visualization</li>
+							<li>Statistical Analysis</li>
+						</ul>
+					</div>
+					<div class="category">
+						<h3>Finance</h3>
+						<ul>
+							<li>Financial Analysis</li>
+							<li>Risk Assessment</li>
+							<li>Portfolio Management</li>
+							<li>Market Research</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.about-container {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	.content {
+		background: #1a1d24;
+		padding: 2rem;
+		border-radius: 8px;
+	}
+
+	.bio {
+		margin-bottom: 2rem;
+	}
+
+	.bio p {
+		margin-bottom: 1rem;
+		line-height: 1.6;
+	}
+
+	h2 {
+		font-size: 1.8rem;
+		margin-bottom: 1.5rem;
+		color: var(--accent);
+	}
+
+	.skill-categories {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 2rem;
+	}
+
+	.category h3 {
+		font-size: 1.2rem;
+		margin-bottom: 1rem;
+		color: var(--accent-light);
+	}
+
+	ul {
+		list-style: none;
+		padding: 0;
+	}
+
+	li {
+		margin-bottom: 0.5rem;
+		padding-left: 1.5rem;
+		position: relative;
+	}
+
+	li:before {
+		content: "•";
+		color: var(--accent);
+		position: absolute;
+		left: 0;
+	}
+</style>

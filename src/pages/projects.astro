@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+// This is where you'll add your projects
+const projects = [
+	{
+		title: "Example Project",
+		description: "Add your project description here",
+		image: "/placeholder-project.jpg",
+		tags: ["Data Science", "Python", "Machine Learning"],
+		href: "/projects/example-project"
+	},
+];
+---
+
+<Layout title="Projects - Your Portfolio">
+	<div class="projects-header">
+		<h1>My Projects</h1>
+		<p>A collection of my work in data science and financial analysis</p>
+	</div>
+
+	<div class="projects-grid">
+		{projects.map(project => (
+			<ProjectCard {...project} />
+		))}
+	</div>
+</Layout>
+
+<style>
+	.projects-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.projects-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 2rem;
+	}
+</style>
