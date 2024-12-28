@@ -22,12 +22,18 @@ jobs:
         run: |
           npm install
           npm ci
+      - name: List files before build
+        run: ls -la
       - name: Build website
         run: npm run build
+      - name: List files after build
+        run: |
+          ls -la
+          ls -la dist || echo "dist directory not found"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./dist
+          path: dist
 
   deploy:
     needs: build
