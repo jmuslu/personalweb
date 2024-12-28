@@ -20,7 +20,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: C:\Users\jbmus\WebstormProjects\personalweb\.idea\src\pages\index.astro
+          path: dist
 
   deploy:
     needs: build
