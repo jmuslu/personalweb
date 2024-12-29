@@ -1,5 +1,8 @@
 # build output
 dist/
+bolt/
+codeandbox/
+vscode/
 
 # generated types
 .astro/
