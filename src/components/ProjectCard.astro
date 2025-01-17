@@ -18,51 +18,13 @@ const { title, description, image, tags, href } = Astro.props;
 		<div class="tags">
 			{tags.map(tag => <span class="tag">{tag}</span>)}
 		</div>
+		<div class="hidden-downloads">
+			{href.map(path => (
+				<a href={path} class="download-link" download>{path}</a>
+			))}
+		</div>
 	</div>
-	{href.map(path => (
-		<a href={path} download class="download-trigger">{path}</a>
-	))}
 </div>
-
-<style>
-	/* Add this to your existing styles */
-	.download-trigger {
-		position: absolute;
-		opacity: 0;
-		pointer-events: none;
-	}
-
-	.project-card {
-		position: relative;
-		cursor: pointer;
-	}
-</style>
-
-
-<script>
-	// Add this script to make clicks trigger downloads
-	document.querySelectorAll('.project-card').forEach(card => {
-		card.addEventListener('click', event => {
-			// Prevent any default behavior on child link clicks
-			event.preventDefault();
-			event.stopPropagation();
-
-			// Trigger the download for all links inside the card
-			const links = card.querySelectorAll('.download-trigger');
-			links.forEach(link => {
-				const a = document.createElement('a');
-				a.href = link.href;
-				a.download = link.download || '';
-				a.click();
-			});
-		});
-	});
-</script>
-
-
-
-
-
 
 <style>
 	.project-card {
@@ -73,9 +35,8 @@ const { title, description, image, tags, href } = Astro.props;
 		transition: transform 0.2s;
 		text-decoration: none;
 		color: inherit;
+		cursor: pointer;
 	}
-
-
 
 	.project-card:hover {
 		transform: translateY(-4px);
@@ -116,4 +77,163 @@ const { title, description, image, tags, href } = Astro.props;
 		border-radius: 999px;
 		font-size: 0.875rem;
 	}
+
+	.hidden-downloads {
+		display: none;
+	}
 </style>
+
+<script>
+	function triggerDownload(url) {
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = '';
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
+
+	function downloadWithDelay(urls) {
+		urls.forEach((url, index) => {
+			setTimeout(() => {
+				triggerDownload(url);
+			}, index * 1000); // 1 second delay between downloads
+		});
+	}
+
+	document.querySelectorAll('.project-card').forEach(card => {
+		card.addEventListener('click', () => {
+			const links = Array.from(card.querySelectorAll('.download-link'));
+			const urls = links.map(link => link.href);
+
+			if (urls.length === 1) {
+				// If there's only one file, trigger download immediately
+				triggerDownload(urls[0]);
+			} else {
+				// For multiple files, trigger downloads with delay
+				downloadWithDelay(urls);
+			}
+		});
+	});
+</script>
+
+
+<!-- -&#45;&#45;-->
+<!--interface Props {-->
+<!--	title: string;-->
+<!--	description: string;-->
+<!--	image: string;-->
+<!--	tags: string[];-->
+<!--	href: string[];-->
+<!--}-->
+
+<!--const { title, description, image, tags, href } = Astro.props;-->
+<!-- -&#45;&#45;-->
+
+<!--<div class="project-card">-->
+<!--	<div class="card-content">-->
+<!--		<img src={image} alt={title} class="project-image" />-->
+<!--		<h3>{title}</h3>-->
+<!--		<p>{description}</p>-->
+<!--		<div class="tags">-->
+<!--			{tags.map(tag => <span class="tag">{tag}</span>)}-->
+<!--		</div>-->
+<!--	</div>-->
+<!--	{href.map(path => (-->
+<!--		<a href={path} download class="download-trigger">{path}</a>-->
+<!--	))}-->
+<!--</div>-->
+
+<!--<style>-->
+<!--	/* Add this to your existing styles */-->
+<!--	.download-trigger {-->
+<!--		position: absolute;-->
+<!--		opacity: 0;-->
+<!--		pointer-events: none;-->
+<!--	}-->
+
+<!--	.project-card {-->
+<!--		position: relative;-->
+<!--		cursor: pointer;-->
+<!--	}-->
+<!--</style>-->
+
+
+<!--<script>-->
+<!--	// Add this script to make clicks trigger downloads-->
+<!--	document.querySelectorAll('.project-card').forEach(card => {-->
+<!--		card.addEventListener('click', event => {-->
+<!--			// Prevent any default behavior on child link clicks-->
+<!--			event.preventDefault();-->
+<!--			event.stopPropagation();-->
+
+<!--			// Trigger the download for all links inside the card-->
+<!--			const links = card.querySelectorAll('.download-trigger');-->
+<!--			links.forEach(link => {-->
+<!--				const a = document.createElement('a');-->
+<!--				a.href = link.href;-->
+<!--				a.download = link.download || '';-->
+<!--				a.click();-->
+<!--			});-->
+<!--		});-->
+<!--	});-->
+<!--</script>-->
+
+
+
+
+
+
+<!--<style>-->
+<!--	.project-card {-->
+<!--		display: block;-->
+<!--		background: #1a1d24;-->
+<!--		border-radius: 8px;-->
+<!--		overflow: hidden;-->
+<!--		transition: transform 0.2s;-->
+<!--		text-decoration: none;-->
+<!--		color: inherit;-->
+<!--	}-->
+
+
+
+<!--	.project-card:hover {-->
+<!--		transform: translateY(-4px);-->
+<!--	}-->
+
+<!--	.card-content {-->
+<!--		padding: 1.5rem;-->
+<!--	}-->
+
+<!--	.project-image {-->
+<!--		width: 100%;-->
+<!--		height: 200px;-->
+<!--		object-fit: cover;-->
+<!--		border-radius: 4px;-->
+<!--	}-->
+
+<!--	h3 {-->
+<!--		margin: 1rem 0;-->
+<!--		font-size: 1.5rem;-->
+<!--		color: var(&#45;&#45;text);-->
+<!--	}-->
+
+<!--	p {-->
+<!--		color: #a1a1aa;-->
+<!--		margin-bottom: 1rem;-->
+<!--	}-->
+
+<!--	.tags {-->
+<!--		display: flex;-->
+<!--		flex-wrap: wrap;-->
+<!--		gap: 0.5rem;-->
+<!--	}-->
+
+<!--	.tag {-->
+<!--		background: var(&#45;&#45;accent);-->
+<!--		color: white;-->
+<!--		padding: 0.25rem 0.75rem;-->
+<!--		border-radius: 999px;-->
+<!--		font-size: 0.875rem;-->
+<!--	}-->
+<!--</style>-->
