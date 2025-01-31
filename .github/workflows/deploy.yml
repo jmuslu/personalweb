@@ -1,60 +1,9 @@
-#name: Deploy to GitHub Pages
-#
-#on:
-#  push:
-#    branches: ["main"]
-#  workflow_dispatch:
-#
-#permissions:
-#  contents: read
-#  pages: write
-#  id-token: write
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#      - uses: actions/setup-node@v4
-#        with:
-#          node-version: 18.14.1
-#      - name: Install dependencies
-#        run: |
-#          npm install
-#          npm ci
-#      - name: Build website
-#        run: npm run build
-#      - name: Upload artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: github-pages
-#          path: dist
-#
-#  deploy:
-#    needs: build
-#    runs-on: ubuntu-latest
-#    permissions:
-#      pages: write
-#      id-token: write
-#    environment:
-#      name: github-pages
-#      url: ${{ steps.deployment.outputs.page_url }}
-#    steps:
-#      - name: Download artifact
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: github-pages
-#      - name: Deploy to GitHub Pages
-#        id: deployment
-#        uses: actions/deploy-pages@v4
-
-
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"]  # Triggers the workflow when changes are pushed to the main branch
-  workflow_dispatch:  # Allows manual trigger of the workflow
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -81,11 +30,16 @@ jobs:
       - name: Build website
         run: npm run build
 
+      - name: List dist contents (for debug)
+        run: |
+          echo "Listing contents of dist folder"
+          ls -alh dist
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: github-pages
-          path: dist  # This is where your built files will be located
+          path: dist
 
   deploy:
     needs: build
@@ -102,9 +56,12 @@ jobs:
         with:
           name: github-pages
 
+      - name: List downloaded artifact contents (for debug)
+        run: |
+          echo "Listing contents of downloaded artifact"
+          ls -alh
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          branch: main  # Deploying from the main branch directly
-          folder: dist  # Specify the folder containing the built website
+
