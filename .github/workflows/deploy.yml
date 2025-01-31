@@ -25,10 +25,12 @@ jobs:
           npm ci
       - name: Build website
         run: npm run build
+      - name: List files in dist directory (debug)
+        run: ls -la dist
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: github-pages  # Artifact name
+          name: github-pages  # Make sure this matches later download artifact name
           path: dist
 
   deploy:
@@ -38,8 +40,10 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages  # Matching artifact name
+          name: github-pages  # Make sure this matches exactly with the uploaded artifact name
+      - name: List files in downloaded artifact (debug)
+        run: ls -la dist  # Verify that the dist directory was successfully downloaded
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
         with:
-          artifact_name: github-pages  # Ensure the artifact name matches
+          artifact_name: github-pages  # Ensure this matches uploaded artifact name
