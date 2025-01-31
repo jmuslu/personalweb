@@ -1,3 +1,45 @@
+#name: Deploy to GitHub Pages
+#
+#on:
+#  push:
+#    branches:
+#      - main  # Specify the branches that trigger this workflow
+#  workflow_dispatch:  # Allow manual triggering
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: '18'
+#      - name: Install dependencies
+#        run: |
+#          npm install
+#          npm ci
+#      - name: Build website
+#        run: npm run build
+#      - name: Upload artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: github-pages
+#          path: dist
+#
+#  deploy:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Download artifact
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: github-pages
+#          path: dist
+#      - name: Deploy to GitHub Pages
+#        uses: actions/deploy-pages@v2
+#
+
+
 name: Deploy to GitHub Pages
 
 on:
@@ -5,6 +47,11 @@ on:
     branches:
       - main  # Specify the branches that trigger this workflow
   workflow_dispatch:  # Allow manual triggering
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -37,4 +84,3 @@ jobs:
           path: dist
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
-
