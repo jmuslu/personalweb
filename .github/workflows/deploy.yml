@@ -1,120 +1,42 @@
-#name: Deploy to GitHub Pages
-#
-#on:
-#  push:
-#    branches: ["main"]
-#  workflow_dispatch:
-#
-#permissions:
-#  contents: read
-#  pages: write
-#  id-token: write
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: 18.14.1
-#      - name: Install dependencies
-#        run: |
-#          npm install
-#          npm ci
-#      - name: List files before build
-#        run: ls -la
-#      - name: Build website
-#        run: npm run build
-#      - name: List files after build
-#        run: |
-#          ls -la
-#          ls -la dist || echo "dist directory not found"
-#      - name: Upload artifact
-#        uses: actions/upload-pages-artifact@v1
-#        with:
-#          path: dist
-#
-#  deploy:
-#    needs: build
-#    runs-on: ubuntu-latest
-#    permissions:
-#      pages: write
-#      id-token: write
-#    environment:
-#      name: github-pages
-#      url: ${{ steps.deployment.outputs.page_url }}
-#    steps:
-#      - name: Deploy to GitHub Pages
-#        id: deployment
-#        uses: actions/deploy-pages@v1
-
-
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+    branches:
+      - main  # Specify the branches that trigger this workflow
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18
-
+          node-version: '18'
       - name: Install dependencies
-        run: npm ci
-
+        run: |
+          npm install
+          npm ci
       - name: Build website
         run: npm run build
-
-      - name: Debug Build Output (Ensure dist/ Exists)
-        run: |
-          echo "Checking dist directory..."
-          ls -la dist
-          find dist -type f | wc -l  # Count files in dist/
-
-      - name: Upload build artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: github-pages  # ✅ Must match download name
-          path: dist  # ✅ Ensure correct output directory
-          retention-days: 1
+          name: github-pages
+          path: dist
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages  # ✅ Must match upload name
-          path: dist  # ✅ Ensure correct directory
-
-      - name: Verify Downloaded Files
-        run: |
-          echo "Checking downloaded artifact..."
-          ls -la dist || { echo "Error: Downloaded artifact is missing!"; exit 1; }
-          find dist -type f | wc -l  # Count files in dist/
-
+          name: github-pages  # Ensure this matches the uploaded artifact name
+          path: dist
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v2
+        with:
+          branch: gh-pages
+          folder: dist
