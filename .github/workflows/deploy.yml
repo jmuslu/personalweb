@@ -3,15 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Specify the branches that trigger this workflow
-  workflow_dispatch:  # Allow manual triggering
-
+      - main
+  workflow_dispatch:
 
 permissions:
-  contents: read  # Required for reading repository contents
-  pages: write     # Required for pushing to GitHub Pages
-  id-token: write  # Required for OpenID Connect token generation
-
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -30,7 +28,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: github-pages
+          name: github-pages  # Artifact name
           path: dist
 
   deploy:
@@ -40,10 +38,8 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages  # Ensure this matches the uploaded artifact name
-          path: dist
+          name: github-pages  # Matching artifact name
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
         with:
-          branch: gh-pages
-          folder: dist
+          artifact_name: github-pages  # Ensure the artifact name matches
