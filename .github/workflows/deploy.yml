@@ -49,6 +49,7 @@
 #        id: deployment
 #        uses: actions/deploy-pages@v1
 
+
 name: Deploy to GitHub Pages
 
 on:
@@ -79,16 +80,17 @@ jobs:
       - name: Build website
         run: npm run build
 
-      - name: Verify build output
+      - name: Debug Build Output (Ensure dist/ Exists)
         run: |
           echo "Checking dist directory..."
-          ls -la dist || { echo "dist directory not found!"; exit 1; }
+          ls -la dist
+          find dist -type f | wc -l  # Count files in dist/
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: github-pages
-          path: dist  # 👈 Make sure "dist" is correct; update if necessary
+          name: github-pages  # ✅ Must match download name
+          path: dist  # ✅ Ensure correct output directory
           retention-days: 1
 
   deploy:
@@ -104,13 +106,14 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages
-          path: dist
+          name: github-pages  # ✅ Must match upload name
+          path: dist  # ✅ Ensure correct directory
 
-      - name: Verify downloaded files
+      - name: Verify Downloaded Files
         run: |
           echo "Checking downloaded artifact..."
-          ls -la dist || { echo "Downloaded artifact is missing!"; exit 1; }
+          ls -la dist || { echo "Error: Downloaded artifact is missing!"; exit 1; }
+          find dist -type f | wc -l  # Count files in dist/
 
       - name: Deploy to GitHub Pages
         id: deployment
