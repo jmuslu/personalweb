@@ -14,26 +14,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18.14.1
-
       - name: Install dependencies
         run: |
           npm install
           npm ci
-
       - name: Build website
         run: npm run build
 
-      - name: List dist contents (for debug)
+      # Debug step: Verify contents of dist folder before upload
+      - name: Verify dist folder before upload (for debug)
         run: |
-          echo "Listing contents of dist folder"
+          echo "Verifying dist folder before upload"
           ls -alh dist
+
+      # Debug step: Check for hidden files or symlinks
+      - name: List all contents of downloaded artifact (including hidden)
+        run: |
+          echo "Listing all contents including hidden files"
+          ls -alhR dist
+
+      # Debug step: Ensure proper file permissions are set
+      - name: Set correct file permissions (for debug)
+        run: |
+          find dist -type f -exec chmod 644 {} \;
+          find dist -type d -exec chmod 755 {} \;
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -56,12 +64,6 @@ jobs:
         with:
           name: github-pages
 
-      - name: List downloaded artifact contents (for debug)
-        run: |
-          echo "Listing contents of downloaded artifact"
-          ls -alh
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
