@@ -1,3 +1,55 @@
+#name: Deploy to GitHub Pages
+#
+#on:
+#  push:
+#    branches: ["main"]
+#  workflow_dispatch:
+#
+#permissions:
+#  contents: read
+#  pages: write
+#  id-token: write
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 18.14.1
+#      - name: Install dependencies
+#        run: |
+#          npm install
+#          npm ci
+#      - name: List files before build
+#        run: ls -la
+#      - name: Build website
+#        run: npm run build
+#      - name: List files after build
+#        run: |
+#          ls -la
+#          ls -la dist || echo "dist directory not found"
+#      - name: Upload artifact
+#        uses: actions/upload-pages-artifact@v1
+#        with:
+#          path: dist
+#
+#  deploy:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    permissions:
+#      pages: write
+#      id-token: write
+#    environment:
+#      name: github-pages
+#      url: ${{ steps.deployment.outputs.page_url }}
+#    steps:
+#      - name: Deploy to GitHub Pages
+#        id: deployment
+#        uses: actions/deploy-pages@v1
+
+
 name: Deploy to GitHub Pages
 
 on:
@@ -14,24 +66,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.14.1
+          node-version: 18
+
       - name: Install dependencies
-        run: |
-          npm install
-          npm ci
-      - name: List files before build
-        run: ls -la
+        run: npm ci
+
       - name: Build website
         run: npm run build
-      - name: List files after build
-        run: |
-          ls -la
-          ls -la dist || echo "dist directory not found"
+
+      - name: Verify build output
+        run: ls -la dist || echo "dist directory not found"
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: dist
 
@@ -47,4 +100,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2
