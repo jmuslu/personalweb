@@ -48,8 +48,6 @@
 #      - name: Deploy to GitHub Pages
 #        id: deployment
 #        uses: actions/deploy-pages@v1
-
-
 name: Deploy to GitHub Pages
 
 on:
@@ -83,10 +81,12 @@ jobs:
       - name: Verify build output
         run: ls -la dist || echo "dist directory not found"
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
+          name: github-pages
           path: dist
+          retention-days: 1  # Artifact is only needed for deployment, so keep it briefly
 
   deploy:
     needs: build
@@ -98,6 +98,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: dist
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
