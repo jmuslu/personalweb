@@ -1,3 +1,73 @@
+#name: Deploy to GitHub Pages
+#
+#on:
+#  push:
+#    branches: ["main"]
+#  workflow_dispatch:
+#
+#permissions:
+#  contents: read
+#  pages: write
+#  id-token: write
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: actions/setup-node@v4
+#        with:
+#          node-version: 18.14.1
+#      - name: Install dependencies
+#        run: |
+#          npm install
+#          npm ci
+#      - name: Build website
+#        run: npm run build
+#
+#      # Debug step: Verify contents of dist folder before upload
+#      - name: Verify dist folder before upload (for debug)
+#        run: |
+#          echo "Verifying dist folder before upload"
+#          ls -alh dist
+#
+#      # Debug step: Check for hidden files or symlinks
+#      - name: List all contents of downloaded artifact (including hidden)
+#        run: |
+#          echo "Listing all contents including hidden files"
+#          ls -alhR dist
+#
+#      # Debug step: Ensure proper file permissions are set
+#      - name: Set correct file permissions (for debug)
+#        run: |
+#          find dist -type f -exec chmod 644 {} \;
+#          find dist -type d -exec chmod 755 {} \;
+#
+#      - name: Upload artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: github-pages
+#          path: dist
+#
+#  deploy:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    permissions:
+#      pages: write
+#      id-token: write
+#    environment:
+#      name: github-pages
+#      url: ${{ steps.deployment.outputs.page_url }}
+#    steps:
+#      - name: Download artifact
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: github-pages
+#
+#      - name: Deploy to GitHub Pages
+#        id: deployment
+#        uses: actions/deploy-pages@v4
+
 name: Deploy to GitHub Pages
 
 on:
@@ -18,52 +88,31 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18.14.1
+
       - name: Install dependencies
-        run: |
-          npm install
-          npm ci
+        run: npm ci
+
       - name: Build website
         run: npm run build
 
-      # Debug step: Verify contents of dist folder before upload
-      - name: Verify dist folder before upload (for debug)
-        run: |
-          echo "Verifying dist folder before upload"
-          ls -alh dist
-
-      # Debug step: Check for hidden files or symlinks
-      - name: List all contents of downloaded artifact (including hidden)
-        run: |
-          echo "Listing all contents including hidden files"
-          ls -alhR dist
-
-      # Debug step: Ensure proper file permissions are set
-      - name: Set correct file permissions (for debug)
-        run: |
-          find dist -type f -exec chmod 644 {} \;
-          find dist -type d -exec chmod 755 {} \;
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
           path: dist
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: github-pages
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
