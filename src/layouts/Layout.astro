@@ -33,7 +33,7 @@ const activePage = getActivePage();
 	<title>{title}</title>
 </head>
 <body>
-<!-- New Navigation Header -->
+<!-- Navigation Header -->
 <nav class="navigation-header bg-dark">
 	<div class="nav-container">
 		<div class="brand">
@@ -54,15 +54,17 @@ const activePage = getActivePage();
 	</div>
 </nav>
 
-<main>
-	<slot />
-</main>
+<div class="page-wrapper">
+	<main>
+		<slot />
+	</main>
 
-<footer class="bg-dark p-4 mt-8">
-	<div class="container mx-auto text-center text-white">
-		<p>&copy; {new Date().getFullYear()} - All rights reserved</p>
-	</div>
-</footer>
+	<footer class="bg-dark">
+		<div class="container">
+			<p>&copy; {new Date().getFullYear()} Joseph Muslu - All rights reserved</p>
+		</div>
+	</footer>
+</div>
 </body>
 </html>
 
@@ -78,17 +80,45 @@ const activePage = getActivePage();
 		font-family: system-ui, sans-serif;
 		background: var(--background);
 		color: var(--text);
+		height: 100%;
 	}
 
 	body {
 		margin: 0;
 		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.page-wrapper {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
 	main {
+		flex: 1;
 		max-width: 1200px;
+		width: 100%;
 		margin: 0 auto;
 		padding: 2rem;
+	}
+
+	footer {
+		margin-top: auto;
+		padding: 1.5rem 0;
+		text-align: center;
+	}
+
+	footer .container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 2rem;
+	}
+
+	footer p {
+		margin: 0;
+		color: #a1a1aa;
 	}
 
 	.bg-dark {
