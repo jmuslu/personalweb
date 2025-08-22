@@ -129,23 +129,31 @@ const activePage = getActivePage();
 		color: var(--accent);
 	}
 
-	/* Navigation Header - MATCH MAIN CONTENT EXACTLY */
+	/* Navigation Header - FULL WIDTH BACKGROUND, ALIGNED CONTENT */
 	.navigation-header {
 		padding: 1rem 0;
 		position: sticky;
 		top: 0;
 		z-index: 100;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+		/* Force background to full width */
+		width: 100vw;
+		margin-left: calc(-50vw + 50%);
+		margin-right: calc(-50vw + 50%);
 	}
 
 	.nav-container {
-		max-width: 1200px;  /* Same as main */
-		width: 100%;        /* Same as main */
-		margin: 0 auto;     /* Same as main */
-		padding: 0 2rem;    /* Same as main */
+		max-width: 1200px;  /* Content stays aligned */
+		width: 100%;
+		margin: 0 auto;
+		padding: 0 2rem;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+
+		/* Ensure container doesn't get cut off */
+		position: relative;
 	}
 
 	.brand {
