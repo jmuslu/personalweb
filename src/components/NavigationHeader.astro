@@ -16,29 +16,15 @@ const { links } = Astro.props;
             <a href="/" class="logo">Your Brand</a>
         </div>
 
-        <!-- Desktop Navigation (hidden on mobile) -->
-        <nav class="desktop-nav">
-            {links.map(link => (
-                    <div class="nav-item">
-                        <a href={link.href} class="nav-button">
-                            <span class="btn-text">{link.title}</span>
-                        </a>
-                        <p class="nav-description">{link.body}</p>
-                    </div>
-            ))}
-        </nav>
-
-        <!-- Mobile Toggle (hidden on desktop) -->
-        <button class="mobile-toggle" type="button">
+        <button class="accordion-toggle" type="button">
             <span class="toggle-text">Menu</span>
             <span class="toggle-arrow">▼</span>
         </button>
     </div>
 
-    <!-- Mobile Accordion Menu (hidden on desktop) -->
-    <div class="mobile-accordion">
+    <div class="accordion-menu">
         {links.map(link => (
-                <a href={link.href} class="mobile-link">
+                <a href={link.href} class="accordion-link">
                     {link.title}
                 </a>
         ))}
@@ -47,22 +33,30 @@ const { links } = Astro.props;
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const toggleBtn = document.querySelector('.mobile-toggle');
-        const accordion = document.querySelector('.mobile-accordion');
+        const toggleBtn = document.querySelector('.accordion-toggle');
+        const menu = document.querySelector('.accordion-menu');
         const arrow = document.querySelector('.toggle-arrow');
 
-        if (toggleBtn && accordion && arrow) {
+        console.log('Script loaded'); // Debug
+        console.log('Toggle button:', toggleBtn); // Debug
+
+        if (toggleBtn && menu && arrow) {
             toggleBtn.addEventListener('click', function() {
-                const isOpen = accordion.classList.contains('expanded');
+                console.log('Button clicked'); // Debug
+                const isOpen = menu.classList.contains('open');
 
                 if (isOpen) {
-                    accordion.classList.remove('expanded');
+                    menu.classList.remove('open');
                     arrow.textContent = '▼';
+                    console.log('Menu closed'); // Debug
                 } else {
-                    accordion.classList.add('expanded');
+                    menu.classList.add('open');
                     arrow.textContent = '▲';
+                    console.log('Menu opened'); // Debug
                 }
             });
+        } else {
+            console.log('Could not find elements'); // Debug
         }
     });
 </script>
@@ -94,79 +88,44 @@ const { links } = Astro.props;
         letter-spacing: 0.5px;
     }
 
-    /* ===== DESKTOP STYLES ===== */
-    .desktop-nav {
-        display: flex;
-        gap: 2rem;
-        align-items: center;
-    }
-
-    .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .nav-button {
-        background-color: #4f39fa;
-        color: white;
-        text-decoration: none;
-        padding: 0.6rem 1.2rem;
-        border-radius: 4px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        display: inline-block;
-        min-width: 120px;
-        text-align: center;
-    }
-
-    .nav-button:hover {
-        background-color: #6a51ff;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(79, 57, 250, 0.3);
-    }
-
-    .nav-description {
-        margin-top: 0.5rem;
-        font-size: 0.8rem;
-        color: #a1a1aa;
-        max-width: 150px;
-    }
-
-    /* ===== MOBILE ELEMENTS (hidden on desktop) ===== */
-    .mobile-toggle {
-        display: none;
+    .accordion-toggle {
         background-color: #4f39fa;
         color: white;
         border: none;
-        padding: 0.6rem 1rem;
+        padding: 0.8rem 1.2rem;
         border-radius: 4px;
         cursor: pointer;
         font-weight: 600;
+        display: flex;
         gap: 0.5rem;
         align-items: center;
+        font-size: 1rem;
+    }
+
+    .accordion-toggle:hover {
+        background-color: #6a51ff;
     }
 
     .toggle-arrow {
-        transition: transform 0.2s ease;
-        font-size: 0.8rem;
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
     }
 
-    .mobile-accordion {
-        display: none;
+    /* Accordion Menu */
+    .accordion-menu {
         background-color: #2a2d36;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease-in-out;
+        transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+        border-top: 1px solid #3a3d47;
     }
 
-    .mobile-accordion.expanded {
-        max-height: 300px;
-        padding: 0.5rem 0;
+    .accordion-menu.open {
+        max-height: 400px;
+        padding: 1rem 0;
     }
 
-    .mobile-link {
+    .accordion-link {
         display: block;
         color: white;
         text-decoration: none;
@@ -174,95 +133,25 @@ const { links } = Astro.props;
         border-bottom: 1px solid #3a3d47;
         font-weight: 500;
         transition: background-color 0.2s ease;
+        margin: 0 2rem;
     }
 
-    .mobile-link:hover {
+    .accordion-link:hover {
         background-color: #4f39fa;
     }
 
-    .mobile-link:last-child {
+    .accordion-link:last-child {
         border-bottom: none;
     }
 
-    /* ===== MODERN RESPONSIVE BREAKPOINTS ===== */
-
-    /* Method 1: Container queries (most modern) - based on available space */
-    @container (max-width: 50rem) {
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
         .header-top {
             padding: 1rem;
         }
 
-        .desktop-nav {
-            display: none !important;
-        }
-
-        .mobile-toggle {
-            display: flex !important;
-        }
-
-        .mobile-accordion {
-            display: block !important;
-        }
-
-        .logo {
-            font-size: 1.3rem;
-        }
-    }
-
-    /* Method 2: Touch device detection */
-    @media (hover: none) and (pointer: coarse) {
-        .header-top {
-            padding: 1rem;
-        }
-
-        .desktop-nav {
-            display: none !important;
-        }
-
-        .mobile-toggle {
-            display: flex !important;
-        }
-
-        .mobile-accordion {
-            display: block !important;
-        }
-
-        .logo {
-            font-size: 1.3rem;
-        }
-    }
-
-    /* Method 3: Viewport units (better than pixels) */
-    @media screen and (max-width: 50rem) {
-        .header-top {
-            padding: 1rem;
-        }
-
-        .desktop-nav {
-            display: none !important;
-        }
-
-        .mobile-toggle {
-            display: flex !important;
-        }
-
-        .mobile-accordion {
-            display: block !important;
-        }
-
-        .logo {
-            font-size: 1.3rem;
-        }
-    }
-
-    /* Fallback for older browsers - ensure desktop elements show on large screens */
-    @media screen and (min-width: 50.1rem) {
-        .mobile-toggle {
-            display: none !important;
-        }
-
-        .mobile-accordion {
-            display: none !important;
+        .accordion-link {
+            margin: 0 1rem;
         }
     }
 </style>
