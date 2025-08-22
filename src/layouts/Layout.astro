@@ -316,8 +316,23 @@ const activePage = getActivePage();
 
 	/* Mobile Styles */
 	@media (max-width: 768px) {
+		/* Navigation header - ensure full width on mobile */
+		.navigation-header {
+			width: 100vw;
+			margin-left: calc(-50vw + 50%);
+			margin-right: calc(-50vw + 50%);
+		}
+
 		.nav-container {
 			padding: 1rem;
+			max-width: none; /* Remove any max-width constraints */
+		}
+
+		/* Mobile accordion - ensure full width */
+		.mobile-accordion {
+			width: 100vw !important;
+			margin-left: calc(-50vw + 50%) !important;
+			margin-right: calc(-50vw + 50%) !important;
 		}
 
 		/* Hide desktop navigation */
@@ -350,7 +365,6 @@ const activePage = getActivePage();
 		}
 	}
 </style>
-
 
 <!-- -&#45;&#45;-->
 <!--interface Props {-->
