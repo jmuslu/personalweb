@@ -41,7 +41,8 @@ const activePage = getActivePage();
 			<p class="brand-tagline">Data Science & Finance</p>
 		</div>
 
-		<div class="nav-links">
+		<!-- Desktop Navigation -->
+		<div class="nav-links desktop-nav">
 			{navItems.map(item => (
 				<a
 					href={item.href}
@@ -51,6 +52,24 @@ const activePage = getActivePage();
 				</a>
 			))}
 		</div>
+
+		<!-- Mobile Toggle Button -->
+		<button class="mobile-toggle" type="button" aria-label="Toggle navigation">
+			<span class="toggle-text">Menu</span>
+			<span class="toggle-arrow">▼</span>
+		</button>
+	</div>
+
+	<!-- Mobile Accordion Menu -->
+	<div class="mobile-accordion">
+		{navItems.map(item => (
+			<a
+				href={item.href}
+				class={`mobile-nav-link ${activePage === item.id ? 'active' : ''}`}
+			>
+				{item.title}
+			</a>
+		))}
 	</div>
 </nav>
 
@@ -65,6 +84,37 @@ const activePage = getActivePage();
 		</div>
 	</footer>
 </div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const toggleBtn = document.querySelector('.mobile-toggle');
+		const accordion = document.querySelector('.mobile-accordion');
+		const arrow = document.querySelector('.toggle-arrow');
+
+		if (toggleBtn && accordion && arrow) {
+			toggleBtn.addEventListener('click', function() {
+				const isOpen = accordion.classList.contains('open');
+
+				if (isOpen) {
+					accordion.classList.remove('open');
+					arrow.textContent = '▼';
+				} else {
+					accordion.classList.add('open');
+					arrow.textContent = '▲';
+				}
+			});
+
+			// Close menu when clicking on a link
+			const mobileLinks = accordion.querySelectorAll('.mobile-nav-link');
+			mobileLinks.forEach(link => {
+				link.addEventListener('click', () => {
+					accordion.classList.remove('open');
+					arrow.textContent = '▼';
+				});
+			});
+		}
+	});
+</script>
 </body>
 </html>
 
@@ -170,6 +220,7 @@ const activePage = getActivePage();
 		margin: 0;
 	}
 
+	/* Desktop Navigation */
 	.nav-links {
 		display: flex;
 		gap: 1rem;
@@ -192,16 +243,311 @@ const activePage = getActivePage();
 		color: var(--accent);
 	}
 
+	/* Mobile Toggle Button */
+	.mobile-toggle {
+		display: none;
+		background-color: var(--accent);
+		color: white;
+		border: none;
+		padding: 0.6rem 1rem;
+		border-radius: 8px;
+		cursor: pointer;
+		font-weight: 500;
+		gap: 0.5rem;
+		align-items: center;
+	}
+
+	.mobile-toggle:hover {
+		background-color: var(--accent-light);
+	}
+
+	.toggle-arrow {
+		transition: transform 0.2s ease;
+		font-size: 0.8rem;
+	}
+
+	/* Mobile Accordion Menu */
+	.mobile-accordion {
+		display: none;
+		background-color: #0a0b0f;
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+		border-top: 1px solid #2a2d36;
+	}
+
+	.mobile-accordion.open {
+		max-height: 300px;
+		padding: 1rem 0;
+	}
+
+	.mobile-nav-link {
+		display: block;
+		color: white;
+		text-decoration: none;
+		padding: 1rem 2rem;
+		border-bottom: 1px solid #2a2d36;
+		font-weight: 500;
+		transition: all 0.2s ease;
+		margin: 0;
+	}
+
+	.mobile-nav-link:hover,
+	.mobile-nav-link.active {
+		background-color: rgba(100, 108, 255, 0.1);
+		color: var(--accent);
+		border-left: 4px solid var(--accent);
+		padding-left: 2.5rem;
+	}
+
+	.mobile-nav-link:last-child {
+		border-bottom: none;
+	}
+
+	/* Mobile Styles */
 	@media (max-width: 768px) {
 		.nav-container {
-			flex-direction: column;
-			gap: 1rem;
 			padding: 1rem;
 		}
 
-		.nav-links {
-			width: 100%;
-			justify-content: center;
+		/* Hide desktop navigation */
+		.desktop-nav {
+			display: none !important;
+		}
+
+		/* Show mobile elements */
+		.mobile-toggle {
+			display: flex !important;
+		}
+
+		.mobile-accordion {
+			display: block !important;
+		}
+
+		.brand-name {
+			font-size: 1.3rem;
+		}
+	}
+
+	/* Desktop - hide mobile elements */
+	@media (min-width: 769px) {
+		.mobile-toggle {
+			display: none !important;
+		}
+
+		.mobile-accordion {
+			display: none !important;
 		}
 	}
 </style>
+
+
+
+
+<!-- -&#45;&#45;-->
+<!--interface Props {-->
+<!--	title: string;-->
+<!--}-->
+
+<!--const { title } = Astro.props;-->
+
+<!--// Determine the active page based on the current URL path-->
+<!--const pathname = Astro.url.pathname;-->
+<!--const getActivePage = () => {-->
+<!--	if (pathname.includes('/projects')) return 'projects';-->
+<!--	if (pathname.includes('/about')) return 'about';-->
+<!--	return 'home';-->
+<!--};-->
+
+<!--const navItems = [-->
+<!--	{ title: "Home", href: "/personalweb/", id: "home" },-->
+<!--	{ title: "Projects", href: "/personalweb/projects", id: "projects" },-->
+<!--	{ title: "About", href: "/personalweb/about", id: "about" }-->
+<!--];-->
+
+<!--const activePage = getActivePage();-->
+<!-- -&#45;&#45;-->
+
+<!--<!doctype html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--	<meta charset="UTF-8" />-->
+<!--	<meta name="description" content="Personal portfolio showcasing data science and finance projects" />-->
+<!--	<meta name="viewport" content="width=device-width" />-->
+<!--	<link rel="icon" type="image/png" href="/personalweb/favicon.png" />-->
+<!--	<meta name="generator" content={Astro.generator} />-->
+<!--	<title>{title}</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; Navigation Header &ndash;&gt;-->
+<!--<nav class="navigation-header bg-dark">-->
+<!--	<div class="nav-container">-->
+<!--		<div class="brand">-->
+<!--			<a href="/personalweb/" class="brand-name">Joseph Muslu</a>-->
+<!--			<p class="brand-tagline">Data Science & Finance</p>-->
+<!--		</div>-->
+
+<!--		<div class="nav-links">-->
+<!--			{navItems.map(item => (-->
+<!--				<a-->
+<!--					href={item.href}-->
+<!--					class={`nav-button ${activePage === item.id ? 'active' : ''}`}-->
+<!--				>-->
+<!--					{item.title}-->
+<!--				</a>-->
+<!--			))}-->
+<!--		</div>-->
+<!--	</div>-->
+<!--</nav>-->
+
+<!--<div class="page-wrapper">-->
+<!--	<main>-->
+<!--		<slot />-->
+<!--	</main>-->
+
+<!--	<footer class="bg-dark">-->
+<!--		<div class="container">-->
+<!--			<p>&copy; {new Date().getFullYear()} Joseph Muslu - All rights reserved</p>-->
+<!--		</div>-->
+<!--	</footer>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+<!--<style is:global>-->
+<!--	:root {-->
+<!--		&#45;&#45;accent: #646cff;-->
+<!--		&#45;&#45;accent-light: #747bff;-->
+<!--		&#45;&#45;background: #13151a;-->
+<!--		&#45;&#45;text: #ffffff;-->
+<!--	}-->
+
+<!--	html {-->
+<!--		font-family: system-ui, sans-serif;-->
+<!--		background: var(&#45;&#45;background);-->
+<!--		color: var(&#45;&#45;text);-->
+<!--		height: 100%;-->
+<!--	}-->
+
+<!--	body {-->
+<!--		margin: 0;-->
+<!--		min-height: 100vh;-->
+<!--		display: flex;-->
+<!--		flex-direction: column;-->
+<!--	}-->
+
+<!--	.page-wrapper {-->
+<!--		flex: 1;-->
+<!--		display: flex;-->
+<!--		flex-direction: column;-->
+<!--	}-->
+
+<!--	main {-->
+<!--		flex: 1;-->
+<!--		max-width: 1200px;-->
+<!--		width: 100%;-->
+<!--		margin: 0 auto;-->
+<!--		padding: 2rem;-->
+<!--	}-->
+
+<!--	footer {-->
+<!--		margin-top: auto;-->
+<!--		padding: 1.5rem 0;-->
+<!--		text-align: center;-->
+<!--	}-->
+
+<!--	footer .container {-->
+<!--		max-width: 1200px;-->
+<!--		margin: 0 auto;-->
+<!--		padding: 0 2rem;-->
+<!--	}-->
+
+<!--	footer p {-->
+<!--		margin: 0;-->
+<!--		color: #a1a1aa;-->
+<!--	}-->
+
+<!--	.bg-dark {-->
+<!--		background-color: #0c0d11;-->
+<!--	}-->
+
+<!--	.text-accent {-->
+<!--		color: var(&#45;&#45;accent);-->
+<!--	}-->
+
+<!--	/* Navigation Header Styles */-->
+<!--	.navigation-header {-->
+<!--		padding: 1rem 0;-->
+<!--		position: sticky;-->
+<!--		top: 0;-->
+<!--		z-index: 100;-->
+<!--		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);-->
+<!--	}-->
+
+<!--	.nav-container {-->
+<!--		max-width: 1200px;-->
+<!--		margin: 0 auto;-->
+<!--		padding: 0 2rem;-->
+<!--		display: flex;-->
+<!--		align-items: center;-->
+<!--		justify-content: space-between;-->
+<!--	}-->
+
+<!--	.brand {-->
+<!--		display: flex;-->
+<!--		flex-direction: column;-->
+<!--	}-->
+
+<!--	.brand-name {-->
+<!--		color: white;-->
+<!--		font-size: 1.5rem;-->
+<!--		font-weight: 700;-->
+<!--		text-decoration: none;-->
+<!--		letter-spacing: 0.5px;-->
+<!--		margin: 0;-->
+<!--		background: linear-gradient(45deg, var(&#45;&#45;accent-light), var(&#45;&#45;accent));-->
+<!--		-webkit-background-clip: text;-->
+<!--		-webkit-text-fill-color: transparent;-->
+<!--	}-->
+
+<!--	.brand-tagline {-->
+<!--		color: #a1a1aa;-->
+<!--		font-size: 0.8rem;-->
+<!--		margin: 0;-->
+<!--	}-->
+
+<!--	.nav-links {-->
+<!--		display: flex;-->
+<!--		gap: 1rem;-->
+<!--	}-->
+
+<!--	.nav-button {-->
+<!--		background-color: transparent;-->
+<!--		border: 2px solid transparent;-->
+<!--		color: white;-->
+<!--		text-decoration: none;-->
+<!--		padding: 0.5rem 1rem;-->
+<!--		border-radius: 8px;-->
+<!--		font-weight: 500;-->
+<!--		transition: all 0.2s;-->
+<!--	}-->
+
+<!--	.nav-button:hover, .nav-button.active {-->
+<!--		background-color: rgba(100, 108, 255, 0.1);-->
+<!--		border-color: var(&#45;&#45;accent);-->
+<!--		color: var(&#45;&#45;accent);-->
+<!--	}-->
+
+<!--	@media (max-width: 768px) {-->
+<!--		.nav-container {-->
+<!--			flex-direction: column;-->
+<!--			gap: 1rem;-->
+<!--			padding: 1rem;-->
+<!--		}-->
+
+<!--		.nav-links {-->
+<!--			width: 100%;-->
+<!--			justify-content: center;-->
+<!--		}-->
+<!--	}-->
+<!--</style>-->
