@@ -41,8 +41,7 @@ const activePage = getActivePage();
 			<p class="brand-tagline">Data Science & Finance</p>
 		</div>
 
-		<!-- Desktop Navigation -->
-		<div class="nav-links desktop-nav">
+		<div class="nav-links">
 			{navItems.map(item => (
 				<a
 					href={item.href}
@@ -52,24 +51,6 @@ const activePage = getActivePage();
 				</a>
 			))}
 		</div>
-
-		<!-- Mobile Toggle Button -->
-		<button class="mobile-toggle" type="button" aria-label="Toggle navigation">
-			<span class="toggle-text">Menu</span>
-			<span class="toggle-arrow">▼</span>
-		</button>
-	</div>
-
-	<!-- Mobile Accordion Menu -->
-	<div class="mobile-accordion">
-		{navItems.map(item => (
-			<a
-				href={item.href}
-				class={`mobile-nav-link ${activePage === item.id ? 'active' : ''}`}
-			>
-				{item.title}
-			</a>
-		))}
 	</div>
 </nav>
 
@@ -84,37 +65,6 @@ const activePage = getActivePage();
 		</div>
 	</footer>
 </div>
-
-<script>
-	document.addEventListener('DOMContentLoaded', function() {
-		const toggleBtn = document.querySelector('.mobile-toggle');
-		const accordion = document.querySelector('.mobile-accordion');
-		const arrow = document.querySelector('.toggle-arrow');
-
-		if (toggleBtn && accordion && arrow) {
-			toggleBtn.addEventListener('click', function() {
-				const isOpen = accordion.classList.contains('open');
-
-				if (isOpen) {
-					accordion.classList.remove('open');
-					arrow.textContent = '▼';
-				} else {
-					accordion.classList.add('open');
-					arrow.textContent = '▲';
-				}
-			});
-
-			// Close menu when clicking on a link
-			const mobileLinks = accordion.querySelectorAll('.mobile-nav-link');
-			mobileLinks.forEach(link => {
-				link.addEventListener('click', () => {
-					accordion.classList.remove('open');
-					arrow.textContent = '▼';
-				});
-			});
-		}
-	});
-</script>
 </body>
 </html>
 
@@ -179,24 +129,20 @@ const activePage = getActivePage();
 		color: var(--accent);
 	}
 
-	/* Navigation Header Styles - FORCE FULL WIDTH */
+	/* Navigation Header - MATCH MAIN CONTENT EXACTLY */
 	.navigation-header {
 		padding: 1rem 0;
 		position: sticky;
 		top: 0;
 		z-index: 100;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-
-		/* Force full viewport width */
-		width: 100vw;
-		margin-left: calc(-50vw + 50%);
-		margin-right: calc(-50vw + 50%);
 	}
 
 	.nav-container {
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 2rem;
+		max-width: 1200px;  /* Same as main */
+		width: 100%;        /* Same as main */
+		margin: 0 auto;     /* Same as main */
+		padding: 0 2rem;    /* Same as main */
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -225,7 +171,6 @@ const activePage = getActivePage();
 		margin: 0;
 	}
 
-	/* Desktop Navigation */
 	.nav-links {
 		display: flex;
 		gap: 1rem;
@@ -248,105 +193,25 @@ const activePage = getActivePage();
 		color: var(--accent);
 	}
 
-	/* Mobile Toggle Button */
-	.mobile-toggle {
-		display: none;
-		background-color: var(--accent);
-		color: white;
-		border: none;
-		padding: 0.6rem 1rem;
-		border-radius: 8px;
-		cursor: pointer;
-		font-weight: 500;
-		gap: 0.5rem;
-		align-items: center;
-	}
-
-	.mobile-toggle:hover {
-		background-color: var(--accent-light);
-	}
-
-	.toggle-arrow {
-		transition: transform 0.2s ease;
-		font-size: 0.8rem;
-	}
-
-	/* Mobile Accordion Menu - FORCE FULL WIDTH */
-	.mobile-accordion {
-		display: none;
-		background-color: #0a0b0f;
-		max-height: 0;
-		overflow: hidden;
-		transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
-		border-top: 1px solid #2a2d36;
-
-		/* Force full viewport width */
-		width: 100vw;
-		margin-left: calc(-50vw + 50%);
-		margin-right: calc(-50vw + 50%);
-	}
-
-	.mobile-accordion.open {
-		max-height: 300px;
-		padding: 1rem 0;
-	}
-
-	.mobile-nav-link {
-		display: block;
-		color: white;
-		text-decoration: none;
-		padding: 1rem 2rem;
-		border-bottom: 1px solid #2a2d36;
-		font-weight: 500;
-		transition: all 0.2s ease;
-		margin: 0;
-	}
-
-	.mobile-nav-link:hover,
-	.mobile-nav-link.active {
-		background-color: rgba(100, 108, 255, 0.1);
-		color: var(--accent);
-		border-left: 4px solid var(--accent);
-		padding-left: 2.5rem;
-	}
-
-	.mobile-nav-link:last-child {
-		border-bottom: none;
-	}
-
-	/* Mobile Styles */
-	@media (max-width: 768px) {
-		/* Navigation header - ensure full width on mobile */
-		.navigation-header {
-			width: 100vw;
-			margin-left: calc(-50vw + 50%);
-			margin-right: calc(-50vw + 50%);
-		}
-
+	/* Mobile Responsive - stack navigation */
+	@media (hover: none) and (pointer: coarse) {
 		.nav-container {
-			padding: 1rem;
-			max-width: none; /* Remove any max-width constraints */
+			flex-direction: column;
+			gap: 1rem;
+			padding: 1rem 2rem; /* Keep same padding system */
 		}
 
-		/* Mobile accordion - ensure full width */
-		.mobile-accordion {
-			width: 100vw !important;
-			margin-left: calc(-50vw + 50%) !important;
-			margin-right: calc(-50vw + 50%) !important;
+		.nav-links {
+			width: 100%;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 0.5rem;
 		}
 
-		/* Hide desktop navigation */
-		.desktop-nav {
-			display: none !important;
-		}
-
-		/* Show mobile elements */
-		.mobile-toggle {
-			display: flex !important;
-		}
-
-		.mobile-accordion {
-			display: block !important;
+		.nav-button {
+			flex: 1;
+			text-align: center;
+			min-width: 80px;
 		}
 
 		.brand-name {
@@ -354,15 +219,9 @@ const activePage = getActivePage();
 		}
 	}
 
-	/* Desktop - hide mobile elements */
-	@media (min-width: 769px) {
-		.mobile-toggle {
-			display: none !important;
-		}
-
-		.mobile-accordion {
-			display: none !important;
-		}
+	/* Desktop fallback */
+	@media (hover: hover) and (pointer: fine) {
+		/* Keep desktop styles as-is */
 	}
 </style>
 
