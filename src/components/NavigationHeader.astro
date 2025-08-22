@@ -28,15 +28,13 @@ const { links } = Astro.props;
             ))}
         </nav>
 
-        <!-- Mobile Hamburger Button -->
-        <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
+        <!-- Mobile Toggle Button -->
+        <button class="mobile-toggle" aria-label="Toggle navigation">
+            <span class="toggle-icon">▼</span>
         </button>
     </div>
 
-    <!-- Mobile Dropdown Menu -->
+    <!-- Mobile Navigation (Accordion Style) -->
     <nav class="mobile-navigation">
         {links.map(link => (
                 <div class="mobile-nav-item">
@@ -50,73 +48,57 @@ const { links } = Astro.props;
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const menuToggle = document.querySelector('.mobile-menu-toggle');
-        const mobileNav = document.querySelector('.mobile-navigation');
+        const mobileToggle = document.querySelector('.mobile-toggle') as HTMLButtonElement;
+        const mobileNav = document.querySelector('.mobile-navigation') as HTMLElement;
+        const toggleIcon = document.querySelector('.toggle-icon') as HTMLElement;
 
-        if (menuToggle && mobileNav) {
-            menuToggle.addEventListener('click', function() {
-                const isOpen = mobileNav.classList.contains('active');
+        if (mobileToggle && mobileNav && toggleIcon) {
+            mobileToggle.addEventListener('click', function() {
+                const isOpen = mobileNav.classList.contains('open');
 
                 if (isOpen) {
-                    mobileNav.classList.remove('active');
-                    menuToggle.classList.remove('active');
+                    // Close the menu
+                    mobileNav.classList.remove('open');
+                    toggleIcon.textContent = '▼';
+                    (toggleIcon as any).style.transform = 'rotate(0deg)';
                 } else {
-                    mobileNav.classList.add('active');
-                    menuToggle.classList.add('active');
+                    // Open the menu
+                    mobileNav.classList.add('open');
+                    toggleIcon.textContent = '▲';
+                    (toggleIcon as any).style.transform = 'rotate(180deg)';
                 }
             });
 
-            // Close menu when clicking on a link
+            // Close menu when clicking on a link (optional)
             const mobileLinks = mobileNav.querySelectorAll('.mobile-nav-link');
             mobileLinks.forEach(link => {
                 link.addEventListener('click', () => {
-                    mobileNav.classList.remove('active');
-                    menuToggle.classList.remove('active');
+                    mobileNav.classList.remove('open');
+                    toggleIcon.textContent = '▼';
+                    (toggleIcon as any).style.transform = 'rotate(0deg)';
                 });
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const target = event.target as Node;
-                const isClickInsideMenu = target && mobileNav.contains(target);
-                const isClickOnToggle = target && menuToggle.contains(target);
-
-                if (!isClickInsideMenu && !isClickOnToggle && mobileNav.classList.contains('active')) {
-                    mobileNav.classList.remove('active');
-                    menuToggle.classList.remove('active');
-                }
             });
         }
     });
 </script>
 
 <style>
-    /* Force full width by breaking out of any parent container */
     .site-header {
         background-color: #23262d;
-        padding: 1rem 0;
         position: sticky;
         top: 0;
         z-index: 1000;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
-        /* These properties force full width */
-        width: 100vw;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
-        position: relative;
+        width: 100%;
     }
 
     .header-container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 2rem;
+        padding: 1rem 2rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        position: relative;
     }
 
     .logo {
@@ -167,63 +149,61 @@ const { links } = Astro.props;
         max-width: 150px;
     }
 
-    /* Mobile Menu Toggle */
-    .mobile-menu-toggle {
+    /* Mobile Toggle Button */
+    .mobile-toggle {
         display: none;
-        flex-direction: column;
         background: none;
-        border: none;
+        border: 2px solid #4f39fa;
+        color: #4f39fa;
+        border-radius: 4px;
+        padding: 0.5rem 0.75rem;
         cursor: pointer;
-        padding: 0.5rem;
-        gap: 4px;
-        z-index: 1001;
-    }
-
-    .hamburger-line {
-        width: 25px;
-        height: 3px;
-        background-color: white;
+        font-size: 1rem;
         transition: all 0.3s ease;
-        border-radius: 2px;
     }
 
-    .mobile-menu-toggle.active .hamburger-line:nth-child(1) {
-        transform: rotate(45deg) translate(6px, 6px);
+    .mobile-toggle:hover {
+        background-color: #4f39fa;
+        color: white;
     }
 
-    .mobile-menu-toggle.active .hamburger-line:nth-child(2) {
-        opacity: 0;
+    .toggle-icon {
+        transition: transform 0.3s ease;
+        display: inline-block;
     }
 
-    .mobile-menu-toggle.active .hamburger-line:nth-child(3) {
-        transform: rotate(-45deg) translate(6px, -6px);
-    }
-
-    /* Mobile Navigation Dropdown - Force full width */
+    /* Mobile Navigation - Accordion Style */
     .mobile-navigation {
         display: none;
-        background-color: #23262d;
-        border-top: 1px solid #3a3d47;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-        /* Force this to break out and be full width */
-        position: absolute;
-        top: 100%;
-        width: 100vw;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
+        background-color: #2a2d36;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.4s ease-in-out;
     }
 
-    .mobile-navigation.active {
-        display: block;
-        animation: slideDown 0.3s ease-out;
+    .mobile-navigation.open {
+        max-height: 500px; /* Adjust based on your menu items */
+        padding: 0.5rem 0;
     }
 
     .mobile-nav-item {
         border-bottom: 1px solid #3a3d47;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        transition-delay: 0.1s;
     }
+
+    .mobile-navigation.open .mobile-nav-item {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .mobile-nav-item:nth-child(1) { transition-delay: 0.1s; }
+    .mobile-nav-item:nth-child(2) { transition-delay: 0.2s; }
+    .mobile-nav-item:nth-child(3) { transition-delay: 0.3s; }
+    .mobile-nav-item:nth-child(4) { transition-delay: 0.4s; }
+    .mobile-nav-item:nth-child(5) { transition-delay: 0.5s; }
 
     .mobile-nav-item:last-child {
         border-bottom: none;
@@ -235,43 +215,35 @@ const { links } = Astro.props;
         text-decoration: none;
         padding: 1rem 2rem;
         font-weight: 500;
-        transition: background-color 0.2s ease;
+        transition: all 0.2s ease;
+        border-left: 4px solid transparent;
     }
 
     .mobile-nav-link:hover,
     .mobile-nav-link:active {
         background-color: #4f39fa;
-    }
-
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        border-left-color: #6a51ff;
+        padding-left: 2.5rem;
     }
 
     /* Mobile Styles */
     @media (max-width: 768px) {
-        .site-header {
-            position: sticky;
-        }
-
         .header-container {
-            padding: 0 1rem;
+            padding: 1rem;
         }
 
-        /* Hide desktop navigation on mobile */
+        /* Hide desktop navigation */
         .desktop-navigation {
             display: none;
         }
 
-        /* Show mobile menu toggle */
-        .mobile-menu-toggle {
-            display: flex;
+        /* Show mobile toggle and navigation */
+        .mobile-toggle {
+            display: block;
+        }
+
+        .mobile-navigation {
+            display: block;
         }
 
         .logo {
@@ -279,9 +251,9 @@ const { links } = Astro.props;
         }
     }
 
-    /* Desktop styles - hide mobile elements */
+    /* Desktop - hide mobile elements */
     @media (min-width: 769px) {
-        .mobile-menu-toggle {
+        .mobile-toggle {
             display: none !important;
         }
 
