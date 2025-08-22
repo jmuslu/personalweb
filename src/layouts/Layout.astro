@@ -81,6 +81,7 @@ const activePage = getActivePage();
 		background: var(--background);
 		color: var(--text);
 		height: 100%;
+		overflow-y: scroll; /* Always show scrollbar to prevent shifting */
 	}
 
 	body {
@@ -129,7 +130,7 @@ const activePage = getActivePage();
 		color: var(--accent);
 	}
 
-	/* Navigation Header - FULL WIDTH BACKGROUND, ALIGNED CONTENT */
+	/* Navigation Header - DIFFERENT APPROACH */
 	.navigation-header {
 		padding: 1rem 0;
 		position: sticky;
@@ -137,10 +138,9 @@ const activePage = getActivePage();
 		z-index: 100;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-		/* Force background to full width */
-		width: 100vw;
-		margin-left: calc(-50vw + 50%);
-		margin-right: calc(-50vw + 50%);
+		/* Take full width of parent, not viewport */
+		width: 100%;
+		margin: 0;
 	}
 
 	.nav-container {
@@ -232,8 +232,6 @@ const activePage = getActivePage();
 		/* Keep desktop styles as-is */
 	}
 </style>
-
-
 
 <!-- -&#45;&#45;-->
 <!--interface Props {-->
