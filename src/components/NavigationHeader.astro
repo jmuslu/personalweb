@@ -184,18 +184,18 @@ const { links } = Astro.props;
         border-bottom: none;
     }
 
-    /* ===== MOBILE BREAKPOINT ===== */
-    @media screen and (max-width: 768px) {
+    /* ===== MODERN RESPONSIVE BREAKPOINTS ===== */
+
+    /* Method 1: Container queries (most modern) - based on available space */
+    @container (max-width: 50rem) {
         .header-top {
             padding: 1rem;
         }
 
-        /* Hide desktop navigation */
         .desktop-nav {
             display: none !important;
         }
 
-        /* Show mobile elements */
         .mobile-toggle {
             display: flex !important;
         }
@@ -209,9 +209,54 @@ const { links } = Astro.props;
         }
     }
 
-    /* ===== DESKTOP BREAKPOINT ===== */
-    @media screen and (min-width: 769px) {
-        /* Hide mobile elements on desktop */
+    /* Method 2: Touch device detection */
+    @media (hover: none) and (pointer: coarse) {
+        .header-top {
+            padding: 1rem;
+        }
+
+        .desktop-nav {
+            display: none !important;
+        }
+
+        .mobile-toggle {
+            display: flex !important;
+        }
+
+        .mobile-accordion {
+            display: block !important;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+        }
+    }
+
+    /* Method 3: Viewport units (better than pixels) */
+    @media screen and (max-width: 50rem) {
+        .header-top {
+            padding: 1rem;
+        }
+
+        .desktop-nav {
+            display: none !important;
+        }
+
+        .mobile-toggle {
+            display: flex !important;
+        }
+
+        .mobile-accordion {
+            display: block !important;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+        }
+    }
+
+    /* Fallback for older browsers - ensure desktop elements show on large screens */
+    @media screen and (min-width: 50.1rem) {
         .mobile-toggle {
             display: none !important;
         }
