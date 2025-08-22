@@ -1,4 +1,6 @@
 ---
+import Header from '../components/Header.astro';
+
 interface Props {
 	title: string;
 }
@@ -12,12 +14,6 @@ const getActivePage = () => {
 	if (pathname.includes('/about')) return 'about';
 	return 'home';
 };
-
-const navItems = [
-	{ title: "Home", href: "/personalweb/", id: "home" },
-	{ title: "Projects", href: "/personalweb/projects", id: "projects" },
-	{ title: "About", href: "/personalweb/about", id: "about" }
-];
 
 const activePage = getActivePage();
 ---
@@ -33,26 +29,7 @@ const activePage = getActivePage();
 	<title>{title}</title>
 </head>
 <body>
-<!-- Navigation Header -->
-<nav class="navigation-header bg-dark">
-	<div class="nav-container">
-		<div class="brand">
-			<a href="/personalweb/" class="brand-name">Joseph Muslu</a>
-			<p class="brand-tagline">Data Science & Finance</p>
-		</div>
-
-		<div class="nav-links">
-			{navItems.map(item => (
-				<a
-					href={item.href}
-					class={`nav-button ${activePage === item.id ? 'active' : ''}`}
-				>
-					{item.title}
-				</a>
-			))}
-		</div>
-	</div>
-</nav>
+<Header activePage={activePage} />
 
 <div class="page-wrapper">
 	<main>
@@ -81,7 +58,7 @@ const activePage = getActivePage();
 		background: var(--background);
 		color: var(--text);
 		height: 100%;
-		overflow-y: scroll; /* Always show scrollbar to prevent shifting */
+		overflow-y: scroll;
 	}
 
 	body {
@@ -128,108 +105,6 @@ const activePage = getActivePage();
 
 	.text-accent {
 		color: var(--accent);
-	}
-
-	/* Navigation Header - DIFFERENT APPROACH */
-	.navigation-header {
-		padding: 1rem 0;
-		position: sticky;
-		top: 0;
-		z-index: 100;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-
-		/* Take full width of parent, not viewport */
-		width: 100%;
-		margin: 0;
-	}
-
-	.nav-container {
-		max-width: 1200px;  /* Content stays aligned */
-		width: 100%;
-		margin: 0 auto;
-		padding: 0 2rem;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-
-		/* Ensure container doesn't get cut off */
-		position: relative;
-	}
-
-	.brand {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.brand-name {
-		color: white;
-		font-size: 1.5rem;
-		font-weight: 700;
-		text-decoration: none;
-		letter-spacing: 0.5px;
-		margin: 0;
-		background: linear-gradient(45deg, var(--accent-light), var(--accent));
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-	}
-
-	.brand-tagline {
-		color: #a1a1aa;
-		font-size: 0.8rem;
-		margin: 0;
-	}
-
-	.nav-links {
-		display: flex;
-		gap: 1rem;
-	}
-
-	.nav-button {
-		background-color: transparent;
-		border: 2px solid transparent;
-		color: white;
-		text-decoration: none;
-		padding: 0.5rem 1rem;
-		border-radius: 8px;
-		font-weight: 500;
-		transition: all 0.2s;
-	}
-
-	.nav-button:hover, .nav-button.active {
-		background-color: rgba(100, 108, 255, 0.1);
-		border-color: var(--accent);
-		color: var(--accent);
-	}
-
-	/* Mobile Responsive - stack navigation */
-	@media (hover: none) and (pointer: coarse) {
-		.nav-container {
-			flex-direction: column;
-			gap: 1rem;
-			padding: 1rem 2rem; /* Keep same padding system */
-		}
-
-		.nav-links {
-			width: 100%;
-			justify-content: center;
-			flex-wrap: wrap;
-			gap: 0.5rem;
-		}
-
-		.nav-button {
-			flex: 1;
-			text-align: center;
-			min-width: 80px;
-		}
-
-		.brand-name {
-			font-size: 1.3rem;
-		}
-	}
-
-	/* Desktop fallback */
-	@media (hover: hover) and (pointer: fine) {
-		/* Keep desktop styles as-is */
 	}
 </style>
 
